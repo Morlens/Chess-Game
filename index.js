@@ -31,4 +31,44 @@ function getPieceSymbol(piece) {
     return pieces[piece] || "";
 }
 
+
+let selectedSquare = null;
+
+document.querySelectorAll(".gamecell").forEach(cell =>{
+    cell.addEventListener("click", handleClick);
+});
+
+function handleClick(event){
+    const cell = event.currentTarget;
+    const clickedId = cell.id;
+    
+    //FIRST CLICK
+    if(selectedSquare === null){
+        //ignore empty square
+        if(cell.textContent === "")return;
+            
+        selectedSquare = clickedId;
+        cell.style.backgroundColor = "yellow" //highlight
+    }
+
+    //SECOND CLICK
+    else{
+        movePiece(selectedSquare, clickedId);
+
+        //remove highlight
+        document.getElementById(selectedSquare).style.backgroundColor = "";
+
+        selectedSquare = null;
+    }
+}
+
+
+function movePiece(from, to) {
+    let fromCell = document.getElementById(from);
+    let toCell = document.getElementById(to);
+
+    // move piece visually
+    toCell.textContent = fromCell.textContent;
+    fromCell.textContent = "";
+}
 renderBoard();
