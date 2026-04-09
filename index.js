@@ -84,7 +84,11 @@ function movePiece(from, to) {
     ) {
         return;
     }
-    
+
+    if(selectedPiece.toLowerCase() === 'p'){
+        let allowed = movePawn(fx,fy,tx,ty,selectedPiece,targetPiece);
+        if (!allowed) return;
+    }
 
     board[toCellIndex] = selectedPiece;
     board[fromCellIndex] = "";
@@ -92,5 +96,31 @@ function movePiece(from, to) {
 
  renderBoard();
 }
+
+
+function movePawn(fx, fy, tx, ty, piece, target) {
+
+   // Determine the piece's color, its current column, and movement direction
+    let direction = (piece === piece.toUpperCase()) ? 1 : -1;
+    let startRow = (piece === piece.toUpperCase()) ? 2 : 7;
+
+    //Pawn's only move straight in column
+    if (tx !== fx ){
+        return false;
+    }
+
+    //Move 1 square up or down depending on pawn color
+    if(ty === fy + direction){
+        if(target === '') return true;
+    }
+
+    //Move 2 squares up or down depending on pawn color
+    if (ty === fy + direction * 2 && fy === startRow){
+        let middleIndex = (8 - (fy + direction)) * 8 + (fx - 1);
+        if(target === "" && board[middleIndex] === "") return true;
+    }
+
+}
+
  renderBoard();
 
