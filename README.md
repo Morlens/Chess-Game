@@ -1,2 +1,2 @@
 # Current progress
-![Image](https://github.com/user-attachments/assets/fa879184-2654-45c7-be61-0a69309eb0dd)
+![Image](https://github.com/user-attachments/assets/d76e9823-d851-473e-ac39-9bad282dba0f)
