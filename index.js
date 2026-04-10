@@ -5,13 +5,13 @@ let board = ["r","n", "b", "q", "k", "b", "n", "r",
              "", "", "", "", "", "", "", "",
              "", "", "", "", "", "", "", "",
              "P","P", "P", "P", "P", "P", "P", "P",
-             "R","N", "B", "Q", "K", "R", "N", "R"
+             "R","N", "B", "Q", "K", "B", "N", "R"
             ]
 
 function renderBoard(){
     for(let y = 8; y >= 1; y--){
         for(let x = 1; x <= 8; x++){
-            let cell = document.getElementById(`${x}_${y}`);
+            let cell = document.getElementById(`${x}_${y}`); 
             let index = (8 - y) * 8 + (x - 1);
             let piece = board[index];
 
@@ -76,6 +76,7 @@ function movePiece(from, to) {
     let selectedPiece = board[fromCellIndex];
     let targetPiece = board[toCellIndex];
 
+    //if game cell is not empty and both pieces are on the same team, block the move
     if(targetPiece !== '' &&
       (
        ( selectedPiece === selectedPiece.toUpperCase() && targetPiece === targetPiece.toUpperCase()) ||
@@ -85,6 +86,7 @@ function movePiece(from, to) {
         return;
     }
 
+    //call movePawn function if selected gamecell is pawn 
     if(selectedPiece.toLowerCase() === 'p'){
         let allowed = movePawn(fx,fy,tx,ty,selectedPiece,targetPiece);
         if (!allowed) return;
@@ -104,7 +106,13 @@ function movePawn(fx, fy, tx, ty, piece, target) {
     let direction = (piece === piece.toUpperCase()) ? 1 : -1;
     let startRow = (piece === piece.toUpperCase()) ? 2 : 7;
 
-    //Pawn's only move straight in column
+    //Pawn capture
+    if(Math.abs(tx - fx) === 1 && ty === fy + direction){
+        if(target !== "")return true;
+
+    }
+
+    //Pawn's only move straight in column if no capture
     if (tx !== fx ){
         return false;
     }
@@ -114,11 +122,15 @@ function movePawn(fx, fy, tx, ty, piece, target) {
         if(target === '') return true;
     }
 
-    //Move 2 squares up or down depending on pawn color
+    //Move 2 square's up or down depending on pawn color
     if (ty === fy + direction * 2 && fy === startRow){
         let middleIndex = (8 - (fy + direction)) * 8 + (fx - 1);
         if(target === "" && board[middleIndex] === "") return true;
     }
+
+    
+
+
 
 }
 
