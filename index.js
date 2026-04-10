@@ -61,9 +61,13 @@ function handleClick(event){
         selectedSquare = null;
     }
 }
+//white always starts first
+let currentTurn = "white";
 
+let turn = document.querySelector("#turn span");
 
 function movePiece(from, to) {
+
     //id of gamecells in html file convert to number
     let [fx, fy] = from.split("_").map(Number);
     let [tx, ty] = to.split("_").map(Number);
@@ -75,6 +79,12 @@ function movePiece(from, to) {
 
     let selectedPiece = board[fromCellIndex];
     let targetPiece = board[toCellIndex];
+
+    //Block move if a black's piece is selected on white's turn and vice versa.
+    if(selectedPiece === selectedPiece.toUpperCase() && currentTurn === "black" || 
+        selectedPiece === selectedPiece.toLowerCase() &&  currentTurn === "white"){ 
+        return;
+    }
 
     //if game cell is not empty and both pieces are on the same team, block the move
     if(targetPiece !== '' &&
@@ -95,9 +105,13 @@ function movePiece(from, to) {
     board[toCellIndex] = selectedPiece;
     board[fromCellIndex] = "";
 
+renderBoard();
 
- renderBoard();
+ currentTurn = currentTurn === "white" ? "black" : "white";
+ turn.textContent = currentTurn === "white" ? "White's Turn" : "Black's Turn";
+
 }
+
 
 
 function movePawn(fx, fy, tx, ty, piece, target) {
@@ -127,12 +141,10 @@ function movePawn(fx, fy, tx, ty, piece, target) {
         let middleIndex = (8 - (fy + direction)) * 8 + (fx - 1);
         if(target === "" && board[middleIndex] === "") return true;
     }
+    return false;
+}
 
     
-
-
-
-}
 
  renderBoard();
 
