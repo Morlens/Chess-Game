@@ -63,7 +63,7 @@ function handleClick(event){
 }
 //white always starts first
 let currentTurn = "white";
-
+let enPassantSquare = "";
 let turn = document.querySelector("#turn span");
 
 function movePiece(from, to) {
@@ -96,11 +96,31 @@ function movePiece(from, to) {
         return;
     }
 
+    // Determine the piece's color, its current column, and movement direction
+    let direction = (selectedPiece === selectedPiece.toUpperCase()) ? 1 : -1;
+    let startRow = (selectedPiece === selectedPiece.toUpperCase()) ? 2 : 7; 
+    
     //call movePawn function if selected gamecell is pawn 
     if(selectedPiece.toLowerCase() === 'p'){
-        let allowed = movePawn(fx,fy,tx,ty,selectedPiece,targetPiece);
+        let allowed = movePawn(fx,fy,tx,ty,selectedPiece,targetPiece,direction,startRow);
         if (!allowed) return;
+
+        //en passant capture
+        if(tx !== fx && targetPiece === ""){
+            let capturedIndex = (8 - fy) * 8 + (tx - 1);
+            board[capturedIndex] = "";
+        }
+
+        //if pawn just did 2 square jump, save the skipped square for en passant
+        if(Math.abs(ty - fy) === 2 && fy === startRow){
+            enPassantSquare = `${fx}_${fy + direction}`;
+        } else {
+             //no en passant available next turn
+            enPassantSquare = "";
+        }
     }
+
+
 
     board[toCellIndex] = selectedPiece;
     board[fromCellIndex] = "";
@@ -114,15 +134,13 @@ renderBoard();
 
 
 
-function movePawn(fx, fy, tx, ty, piece, target) {
 
-   // Determine the piece's color, its current column, and movement direction
-    let direction = (piece === piece.toUpperCase()) ? 1 : -1;
-    let startRow = (piece === piece.toUpperCase()) ? 2 : 7;
+function movePawn(fx, fy, tx, ty, piece, target, direction, startRow) {
 
     //Pawn capture
     if(Math.abs(tx - fx) === 1 && ty === fy + direction){
         if(target !== "")return true;
+        if(`${tx}_${ty}` === enPassantSquare )return true;
 
     }
 
@@ -139,7 +157,9 @@ function movePawn(fx, fy, tx, ty, piece, target) {
     //Move 2 square's up or down depending on pawn color
     if (ty === fy + direction * 2 && fy === startRow){
         let middleIndex = (8 - (fy + direction)) * 8 + (fx - 1);
-        if(target === "" && board[middleIndex] === "") return true;
+        if(target === "" && board[middleIndex] === ""){
+            return true;
+        }
     }
     return false;
 }
