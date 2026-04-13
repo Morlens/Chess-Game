@@ -69,13 +69,13 @@ let turn = document.querySelector("#turn span");
 function movePiece(from, to) {
 
     //id of gamecells in html file convert to number
-    let [fx, fy] = from.split("_").map(Number);
-    let [tx, ty] = to.split("_").map(Number);
+    let [fc, fr] = from.split("_").map(Number);
+    let [tc, tr] = to.split("_").map(Number);
     
     //piece current location 
-    let fromCellIndex = (8 - fy) * 8 + (fx - 1);
+    let fromCellIndex = (8 - fr) * 8 + (fc - 1);
     //piece destination
-    let toCellIndex= (8 - ty) * 8 + (tx - 1);
+    let toCellIndex= (8 - tr) * 8 + (tc - 1);
 
     let selectedPiece = board[fromCellIndex];
     let targetPiece = board[toCellIndex];
@@ -102,18 +102,18 @@ function movePiece(from, to) {
     
     //call movePawn function if selected gamecell is pawn 
     if(selectedPiece.toLowerCase() === 'p'){
-        let allowed = movePawn(fx,fy,tx,ty,selectedPiece,targetPiece,direction,startRow);
+        let allowed = movePawn(fc,fr,tc,tr,selectedPiece,targetPiece,direction,startRow);
         if (!allowed) return;
 
         //en passant capture
-        if(tx !== fx && targetPiece === ""){
-            let capturedIndex = (8 - fy) * 8 + (tx - 1);
+        if(tc !== fc && targetPiece === ""){
+            let capturedIndex = (8 - fr) * 8 + (tc - 1);
             board[capturedIndex] = "";
         }
 
         //if pawn just did 2 square jump, save the skipped square for en passant
-        if(Math.abs(ty - fy) === 2 && fy === startRow){
-            enPassantSquare = `${fx}_${fy + direction}`;
+        if(Math.abs(tr - fr) === 2 && fr === startRow){
+            enPassantSquare = `${fc}_${fr + direction}`;
         } else {
              //no en passant available next turn
             enPassantSquare = "";
@@ -125,38 +125,38 @@ function movePiece(from, to) {
     board[toCellIndex] = selectedPiece;
     board[fromCellIndex] = "";
 
-renderBoard();
+    renderBoard();
 
- currentTurn = currentTurn === "white" ? "black" : "white";
- turn.textContent = currentTurn === "white" ? "White's Turn" : "Black's Turn";
+    currentTurn = currentTurn === "white" ? "black" : "white";
+    turn.textContent = currentTurn === "white" ? "White's Turn" : "Black's Turn";
 
 }
 
 
 
 
-function movePawn(fx, fy, tx, ty, piece, target, direction, startRow) {
+function movePawn(fc, fr, tc, tr, piece, target, direction, startRow) {
 
     //Pawn capture
-    if(Math.abs(tx - fx) === 1 && ty === fy + direction){
+    if(Math.abs(tc - fc) === 1 && tr === fr + direction){
         if(target !== "")return true;
-        if(`${tx}_${ty}` === enPassantSquare )return true;
+        if(`${tc}_${tr}` === enPassantSquare )return true;
 
     }
 
     //Pawn's only move straight in column if no capture
-    if (tx !== fx ){
+    if (tc !== fc ){
         return false;
     }
 
     //Move 1 square up or down depending on pawn color
-    if(ty === fy + direction){
+    if(tr === fr + direction){
         if(target === '') return true;
     }
 
     //Move 2 square's up or down depending on pawn color
-    if (ty === fy + direction * 2 && fy === startRow){
-        let middleIndex = (8 - (fy + direction)) * 8 + (fx - 1);
+    if (tr === fr + direction * 2 && fr === startRow){
+        let middleIndex = (8 - (fr + direction)) * 8 + (fc - 1);
         if(target === "" && board[middleIndex] === ""){
             return true;
         }
