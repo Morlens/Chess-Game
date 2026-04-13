@@ -9,10 +9,10 @@ let board = ["r","n", "b", "q", "k", "b", "n", "r",
             ]
 
 function renderBoard(){
-    for(let y = 8; y >= 1; y--){
-        for(let x = 1; x <= 8; x++){
-            let cell = document.getElementById(`${x}_${y}`); 
-            let index = (8 - y) * 8 + (x - 1);
+    for(let row = 8; row >= 1; row--){
+        for(let column = 1; column <= 8; column++){
+            let cell = document.getElementById(`${column}_${row}`); 
+            let index = (8 - row) * 8 + (column - 1);
             let piece = board[index];
 
            // console.log(board[index]);
