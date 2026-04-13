@@ -120,6 +120,10 @@ function movePiece(from, to) {
         }
     }
 
+    if(selectedPiece.toLowerCase() === 'b'){
+        if(!moveBishop(fc,fr,tc,tr)) return;
+    }
+
 
 
     board[toCellIndex] = selectedPiece;
@@ -164,6 +168,29 @@ function movePawn(fc, fr, tc, tr, piece, target, direction, startRow) {
     return false;
 }
 
+function moveBishop(fc, fr, tc, tr){
+
+    //bishop should move diagonally
+    if(Math.abs(tc - fc) !== Math.abs(tr - fr)) return false;
+
+    //bishop direction
+    let rowDirection = tr > fr ? 1 : -1;
+    let colDirection = tc > fc ? 1 : -1;
+
+    //checking each square along the path (excluding destination)
+    let r = fr + rowDirection;
+    let c = fc + colDirection;
+
+    //keep looping when target destination is not reached
+    while(r !== tr && c !== tc){
+        let index = (8 - r) * 8 + (c - 1);
+        if(board[index] !== "")return false; //path is blocked
+        r += rowDirection;
+        c += colDirection; 
+    }
+    return true;
+
+}
     
 
  renderBoard();
