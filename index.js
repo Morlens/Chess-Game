@@ -134,9 +134,13 @@ function movePiece(from, to) {
     if(selectedPiece.toLowerCase() === 'n'){
         if(!moveKnight(fc,fr,tc,tr)) return;
     }
-
+    //call moveQueen() func if selected gamecell is Queen
     if(selectedPiece.toLowerCase() === 'q'){
-        if(!moveQueen(fc,fr,tc,tr))return;
+        if(!moveQueen(fc,fr,tc,tr)) return;
+    }
+    //call moveKing() func if selected gamecell is King
+    if(selectedPiece.toLowerCase() === 'k'){
+        if(!moveKing(fc,fr,tc,tr)) return;
     }
 
     board[toCellIndex] = selectedPiece;
@@ -266,6 +270,13 @@ function moveQueen(fc,fr,tc,tr){
         
   return false;
 }  
+
+function moveKing(fc, fr, tc, tr){
+
+    if(Math.abs(tc - fc) <= 1 && Math.abs(tr - fr) <= 1) return true;
+
+    return false;
+}
 
  renderBoard();
 
