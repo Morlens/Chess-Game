@@ -135,6 +135,10 @@ function movePiece(from, to) {
         if(!moveKnight(fc,fr,tc,tr)) return;
     }
 
+    if(selectedPiece.toLowerCase() === 'q'){
+        if(!moveQueen(fc,fr,tc,tr))return;
+    }
+
     board[toCellIndex] = selectedPiece;
     board[fromCellIndex] = "";
 
@@ -232,6 +236,36 @@ function moveKnight(fc, fr, tc, tr){
     return false;
 }
 
+function moveQueen(fc,fr,tc,tr){
+    
+    // copy pasted logic from moveRook() and moveBishop() func
+    let rowDirection = tr > fr ? 1 : tr < fr ? -1 : 0
+    let colDirection = tc > fc ? 1 : tc < fc ? -1 : 0
+    
+    let r = fr + rowDirection;
+    let c = fc + colDirection;
+
+    if(tc !== fc && tr === fr || tc === fc && tr !== fr){
+     while(r === tr && c !== tc || r !== tr && c === tc){
+        let index = (8 - r) * 8 + (c - 1);
+        if(board[index] !== "")return false;
+        r += rowDirection;
+        c += colDirection;
+        }
+     return true;
+    }
+    else if(Math.abs(tc - fc) === Math.abs(tr - fr)){
+     while(r !== tr && c !== tc){
+        let index = (8 - r) * 8 + (c - 1);
+        if(board[index] !== "")return false; //path is blocked
+        r += rowDirection;
+        c += colDirection; 
+        }    
+     return true;
+    }
+        
+  return false;
+}  
 
  renderBoard();
 
