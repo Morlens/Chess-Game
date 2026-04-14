@@ -120,7 +120,7 @@ function movePiece(from, to) {
         }
     }
     
-    //call moveBishop() func if selected gamecell is bishop 
+    //call moveBishop() func if selected gamecell is Bishop 
     if(selectedPiece.toLowerCase() === 'b'){
         if(!moveBishop(fc,fr,tc,tr)) return;
     }
@@ -130,6 +130,10 @@ function movePiece(from, to) {
         if(!moveRook(fc,fr,tc,tr)) return;
     }
 
+    //call moveKnight() func if selected gamecell is Knight
+    if(selectedPiece.toLowerCase() === 'n'){
+        if(!moveKnight(fc,fr,tc,tr)) return;
+    }
 
     board[toCellIndex] = selectedPiece;
     board[fromCellIndex] = "";
@@ -217,8 +221,17 @@ function moveRook(fc, fr, tc, tr){
      }
     return true;
     }
-  return false;
+  return false; 
 }
+
+function moveKnight(fc, fr, tc, tr){
+  
+    if((Math.abs(tc - fc) === 1 && Math.abs(tr - fr) === 2) || 
+    (Math.abs(tc - fc) === 2 && Math.abs(tr - fr) === 1)) {return true;}
+
+    return false;
+}
+
 
  renderBoard();
 
