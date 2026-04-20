@@ -9,7 +9,6 @@ document.querySelectorAll(".gamecell").forEach(cell =>{
 });
 
 function handleClick(event){
-    
     const cell = event.currentTarget;
     const clickedId = cell.id;
     
@@ -125,10 +124,7 @@ function movePiece(from, to) {
     board[fromCellIndex] = "";
 
     if (isInCheck(currentTurn)) {
-        board[fromCellIndex] = selectedPiece;
-        board[toCellIndex] = targetPiece;
         highlightCheck();
-        return;
     }
 
     renderBoard();
