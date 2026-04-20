@@ -9,6 +9,7 @@ document.querySelectorAll(".gamecell").forEach(cell =>{
 });
 
 function handleClick(event){
+    
     const cell = event.currentTarget;
     const clickedId = cell.id;
     
@@ -23,10 +24,20 @@ function handleClick(event){
 
     //SECOND CLICK
     else{
+        const prevCell = document.getElementById(selectedSquare);
+
+        // Clicked the same square — deselect
+        if (clickedId === selectedSquare) {
+            selectedSquare = null;
+            highlightCheck(); 
+            return;
+        }
+
         movePiece(selectedSquare, clickedId);
 
-        //remove highlight
-        document.getElementById(selectedSquare).style.backgroundColor = "";
+        // Remove highlight then restore check highlight
+        prevCell.style.backgroundColor = "";
+        highlightCheck();
 
         selectedSquare = null;
     }
@@ -113,7 +124,15 @@ function movePiece(from, to) {
     board[toCellIndex] = selectedPiece;
     board[fromCellIndex] = "";
 
+    if (isInCheck(currentTurn)) {
+        board[fromCellIndex] = selectedPiece;
+        board[toCellIndex] = targetPiece;
+        highlightCheck();
+        return;
+    }
+
     renderBoard();
+    highlightCheck();
 
     currentTurn = currentTurn === "white" ? "black" : "white";
     turn.textContent = currentTurn === "white" ? "White's Turn" : "Black's Turn";
