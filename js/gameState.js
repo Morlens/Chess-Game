@@ -124,7 +124,27 @@ function movePiece(from, to) {
     board[fromCellIndex] = "";
 
     if (isInCheck(currentTurn)) {
+        board[fromCellIndex] = selectedPiece;
+        board[toCellIndex] = targetPiece;
         highlightCheck();
+
+        let kingPiece = currentTurn === "white" ? "K" : "k";
+        let kingIndex = board.indexOf(kingPiece);
+        let kingRow = 8 - Math.floor(kingIndex / 8);
+        let kingCol = (kingIndex % 8) + 1;
+        let kingCell = document.getElementById(`${kingCol}_${kingRow}`);
+
+        let flashes = 0;
+        let interval = setInterval(() => {
+            kingCell.style.backgroundColor = kingCell.style.backgroundColor === "red" ? "" : "red";
+            flashes++;
+            if (flashes === 4) {
+                clearInterval(interval);
+                kingCell.style.backgroundColor = "red";
+                highlightCheck();
+            }
+        }, 250);
+        return;
     }
 
     renderBoard();
